@@ -1,0 +1,40 @@
+<section>
+    <div class="container mt-5">
+        <div class="row">
+            {{#each prod}}
+            <div class="col-md-3">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" style="height: 200px;width: 200px; align-self: center;"
+                        src='/product-images/{{this._id}}.jpg' alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6><b>Rs.{{this.price}}</b></h6>
+                        <p class="card-text">{{this.des}}</p>
+                        {{!-- <a href="/add-to-cart/{{this._id}}" class="btn btn-primary"
+                            onclick="cartCount('{{this._id}}')">Add to cart</a> --}}
+                        <button class="btn btn-primary" onclick="cartCount('{{this._id}}')">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+
+<script>
+    function cartCount(prodID) {
+        $.ajax({
+            url: '/add-to-cart/' + prodID,
+            method: 'get',
+            success: (response) => {
+
+                if (response.status) {
+
+                    let count = $('#cart-count').html()
+                    count = parseInt(count) + 1
+                    $('#cart-count').html(count)
+                }
+            }
+        })
+    }
+</script>

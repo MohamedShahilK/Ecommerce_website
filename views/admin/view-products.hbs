@@ -1,0 +1,52 @@
+<section>
+    <div class="container-fluid col-md-9 mt-4">
+        <div class="row mb-4">
+            <a href="/admin/addproduct" class="btn btn-success ml-auto">Add Product</a>
+        </div>
+        <table id="productsTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each prod}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.des}}</td>
+                    <td><img style="height: 50px;width: 50px;" src="/product-images/{{this._id}}.jpg" alt=""></td>
+
+                    {{!-- <td style="border-top: none;"> --}}
+                    <td>
+                        {{!-- <button onclick="location.href='/admin/delete-product'"
+                            class="btn btn-danger">Delete</button>
+                        --}}
+                        <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit </a>
+                        <a href="/admin/delete-product/{{this._id}}" onclick="return confirm('Are you Sure?')"
+                            id="delete" class="btn btn-danger">Delete</a>
+
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('#productsTable').DataTable();
+    });
+
+    //sometimes use the shorthand $() for $( document ).ready()
+
+    // $(function () {
+    //    $('#productsTable').DataTable();
+    //});
+    
+</script>

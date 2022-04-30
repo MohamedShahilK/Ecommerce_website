@@ -1,0 +1,27 @@
+<section>
+    <div class="container">
+        <div class="row p-5">
+            <div class="col-md-6 mx-auto">
+                <h2 class="text-center">Login</h2>
+                <form action="/login" method="POST" enctype="multipart/form-data">
+
+                    {{#if loginErr}}
+                        <p class="error"> {{loginErr}}</p>
+                    {{/if}}
+                    
+                    <div class="p-2"><label>Email</label>
+                        <input type="text" name="Email" class="form-control">
+                    </div>
+
+                    <div class="p-2"><label>Password</label>
+                        <input type="password" name="Password" class="form-control">
+                    </div>
+
+                    <a href="/signup" style="text-decoration: none;" class="m-2 ">Create a account?</a>   
+                        
+                    <button type="submit" class="btn btn-primary m-2" style="float: right;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

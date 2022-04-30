@@ -1,0 +1,157 @@
+<section>
+    <div class="container mt-5">
+        <form action="" id="checkout-form">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <h2>Enter Delivery Details</h2><br>
+                    <div>
+                        <label for="">Address</label>
+                        <input class="form-control" type="text" id="address" name="address">
+
+                        <label for="">Pincode</label>
+                        <input class="form-control" type="number" id="pincode" name="pincode">
+
+                        <label for="">Mobile</label>
+                        <input class="form-control" type="text" id="mobile" name="mobile">
+
+                        <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+                        {{!-- adding extra field and hide it --}}
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="container checkout mt-5 ms-5">
+
+                        <h5>Total Amount : Rs.{{total}}</h5>
+
+                        <hr>
+
+                        <div class="payment">
+                            <p>Payment method</p>
+
+                            <label for="" class="radio-inline">
+                                <input type="radio" name="payment-method" value="COD" checked>COD
+                            </label>
+
+                            <label for="" class="radio-inline">
+                                <input type="radio" name="payment-method" value="ONLINE">Online Payment
+                            </label>
+
+                            <button class="btn btn-primary" style="float:right;" type="submit">Checkout</button>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<style>
+    input[type=radio] {
+        width: 20px;
+        height: 20px;
+    }
+
+    label.radio-inline {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkout {
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 30px;
+    }
+
+    .payment {
+        padding-bottom: 16px;
+    }
+</style>
+
+<script>
+    $('#checkout-form').submit((e) => {
+        e.preventDefault()
+
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (res) => {
+                if (res.codStatus) {
+                    location.href = '/ordersucess'
+                } else {
+
+                    console.log(res)
+
+                    //RazPay --  Step-2  //here res is the order from '/place-order'
+                    //Here we pass orderid created from serverside
+                    //Add the Pay interface on your web page(client side) using the checkout code
+                    razorpayPayment(res)
+
+                }
+            }
+        })
+    })
+
+
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_eCRiypDBsbMsJY", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "TimeLime Group",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+
+            //After payment
+            "handler": function (response) {
+                //alert(response.razorpay_payment_id);
+                //alert(response.razorpay_order_id);
+                //alert(response.razorpay_signature)
+
+                verifyPayment(response, order)
+            },
+
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        }
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(payment, order) {
+
+        $.ajax({
+            url: '/verifypayment',
+            data: {
+                payment, order
+            },
+            method: 'post',
+            success: (response) => {
+
+                if (response.status) {
+                    location.href = '/ordersucess'
+                } else {
+                    alert('payment Failed')
+                }
+            }
+        })
+    }
+</script>

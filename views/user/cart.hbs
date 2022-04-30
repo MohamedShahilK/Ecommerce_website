@@ -1,0 +1,95 @@
+<section>
+    {{#if products}}
+    <div class="container mt-5 ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price </th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{!-- we can session contents anywhere Except "inside of each or any other methods".
+                So we use {{../user._id}} in that cases --}}
+                
+                {{!-- <h1>{{user._id}}</h1> --}}
+
+                {{#each products}}
+                <tr>
+                    <td><img src='/product-images/{{this.item}}.jpg' style="width: 50px; height: 50px;" alt=""></td>
+                    <td><span id="pdtName">{{this.product.name}}</span></td>
+
+                    <td>Rs. {{this.product.price}}</td>
+
+                    <td>
+                        <button onclick="changeQuantity('{{this._id}}', '{{this.item}}','{{../user._id}}' , -1)"
+                            class="btn btn-secondary pr-5">-</button>
+                        <span id="{{this.item}}">{{this.quantity}}</span>
+                        <button onclick="changeQuantity('{{this._id}}', '{{this.item}}','{{../user._id}}' , 1)"
+                            class="btn btn-success pl-5">+</button>
+                    </td>
+                    <td>
+                        {{!-- <button class="btn btn-danger"
+                            onclick="location.href='/cartPdtRemove/{{this.item}}'">Remove</button> --}}
+                        {{!-- <button class="btn btn-danger" onclick="removePdt('{{this.item}}')">Remove</button> --}}
+                        <button class="btn btn-danger"
+                            onclick="removePdt('{{this.item}}','{{this.user}}')">Remove</button>
+                    </td>
+
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <hr>
+
+        <div class="float-right">
+            <h3>Total: Rs. <span id="total">{{total}}</span></h3>
+            <a class="btn btn-success mt-3" style="width: 100%;" href="/place-order">Place Order</a>
+        </div>
+
+    </div>
+    {{else}}
+    <h1>Cart is Empty</h1>
+    {{/if}}
+</section>
+
+<script>
+    function changeQuantity(cartId, prodId, userId, count) {
+
+        let quantity = parseInt(document.getElementById(prodId).innerHTML) //here value of id is dynamic (different values)
+        let productName = document.getElementById('pdtName').innerHTML  //here value of id is static (unique --> pdtName)
+        //count = parseInt(count) //We already done it.
+
+        $.ajax({
+            url: 'change-quantity',
+            data: {
+                cartId, prodId, count, quantity, userId
+            },
+            method: 'post',
+            success: (res) => {
+                //location.reload()
+                // alert(res)
+
+                if (res.removePdt) {
+                    alert(productName + " is Removed")
+                    location.reload()
+                } else {
+                    //Product-Quantity
+                    document.getElementById(prodId).innerHTML = quantity + count
+
+                    //Cart-Count
+                    let cartcount = $('#cart-count').html()
+                    cartcount = parseInt(cartcount) + count
+                    $('#cart-count').html(cartcount)
+
+                    //Total-Amount
+                    console.log(res)
+                    document.getElementById('total').innerHTML = res.total
+                }
+            }
+        })
+    }
+</script>
