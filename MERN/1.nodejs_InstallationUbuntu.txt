@@ -1,0 +1,11 @@
+
+---------------nodejs install ubuntu 20.04-----------------------------------------------
+
+cd ~
+curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh  (check version of nodejs)
+sudo bash /tmp/nodesource_setup.sh
+sudo apt install nodejs
+
+Then we install vscode(if not already installed)
+
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04

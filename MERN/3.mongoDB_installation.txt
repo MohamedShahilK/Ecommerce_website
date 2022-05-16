@@ -1,0 +1,43 @@
+
+-----------------------Solution---------------------------------------------------
+sudo mongod --fork --logpath /var/lib/mongodb/mongodb.log --dbpath /var/lib/mongodb
+
+
+--------------------MongoDB Insallation------------------
+
+wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+
+
+------------------Only Once after installation-----------------------------
+
+sudo systemctl start mongod
+
+
+-------------Start-----------
+mongo
+
+------------Application------------
+
+Robomongo
+
+
+----------------MongoDB connection with nodejs--------------------
+
+npm install mongodb(native mongodb driver)
+
+// Retrieve
+var MongoClient = require('mongodb').MongoClient;
+
+// Connect to the db
+MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+  if(!err) {
+    console.log("We are connected");
+  }
+});
+
+
+
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/

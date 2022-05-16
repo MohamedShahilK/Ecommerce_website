@@ -1,0 +1,31 @@
+
+-------------------------Express------------------------
+
+npm install express
+
+
+-----------------------Express generator--------------
+	 
+-----install along with hbs template engine-----
+
+npx express-generator --hbs
+
+---------------------------------OR
+
+npx express-generator
+
+---------------------------------OR
+
+npm install -g express-generator
+express
+
+
+https://stackoverflow.com/questions/17818395/how-to-use-partials-in-express-js-layout
+
+app.engine('hbs', hbs.engine({
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  layoutsDir: __dirname + '/views/layout/',
+  partialsDir: __dirname + '/views/partials'
+}))
+
