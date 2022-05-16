@@ -6,7 +6,7 @@ npm install
 
 <!-- Project run -->
 npm start 
-    or
+    \n
 node ./bin/www
-    or
+    \n
 nodemon ./bin/www
